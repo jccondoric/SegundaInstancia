@@ -110,6 +110,7 @@ private:
     // score update
     void updateScore();
     // update collisions
+    void saltarPlayer(const bool isPressed,const int keycode);
     void updatePlayerCollision();
     void updateEnemiesCollision();
     void updateBangsCollision();
@@ -135,6 +136,7 @@ private:
     std::shared_ptr<Music> menuMusic = nullptr;                       // menu music
     std::shared_ptr<Sound> gameoverSound = nullptr;                   // game over sound
     std::shared_ptr<Sound> winSound = nullptr;                        // win sound
+    std::shared_ptr<Sound> jumpSound = nullptr;                      // saltar player
     std::shared_ptr<Sound> explosionSound = nullptr;                  // explosion sound
     std::shared_ptr<Text> timerNumber = nullptr;                      // timer
     std::shared_ptr<Text> scoreNumber = nullptr;                      // score

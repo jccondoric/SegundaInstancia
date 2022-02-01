@@ -28,6 +28,7 @@ void AssetManager::load(SDL_Renderer* renderer)
     loadSound(SoundEnum::Win, "assets/win.wav");
     loadSound(SoundEnum::Lose, "assets/lose.wav");
     loadSound(SoundEnum::Explosion, "assets/explosion.wav");
+    loadSound(SoundEnum::Jump, "assets/jump.wav");
     if (auto explosionSound = getSound(SoundEnum::Explosion))
     {
         Mix_VolumeChunk(explosionSound.get(), 35);

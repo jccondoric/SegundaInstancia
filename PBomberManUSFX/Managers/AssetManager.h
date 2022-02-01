@@ -48,7 +48,8 @@ enum class SoundEnum : int
 {
     Win,
     Lose,
-    Explosion
+    Explosion,
+    Jump
 };
 /**
     * @brief Hash for Texture enum

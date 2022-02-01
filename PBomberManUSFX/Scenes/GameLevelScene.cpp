@@ -28,6 +28,8 @@ GameLevelScene::GameLevelScene(GameManager* _gameManager, const unsigned int _st
     gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
     winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
     explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
+    jumpSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Jump));
+
     // render text
     // spawnTextObjects();
     // generate tile map

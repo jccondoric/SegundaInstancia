@@ -47,6 +47,7 @@ public:
     std::shared_ptr<Sound> gameoverSound = nullptr;                   // game over sound
     std::shared_ptr<Sound> winSound = nullptr;                        // win sound
     std::shared_ptr<Sound> explosionSound = nullptr;                  // explosion sound
+    std::shared_ptr<Sound> jumpSound = nullptr;
     std::shared_ptr<Text> timerNumber = nullptr;                      // timer
     std::shared_ptr<Text> scoreNumber = nullptr;                      // score
     std::shared_ptr<Player> player = nullptr;                         // player

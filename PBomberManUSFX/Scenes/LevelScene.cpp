@@ -40,6 +40,7 @@ LevelScene::LevelScene(GameManager* _gameManager, const unsigned int _stage, con
     gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
     winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
     explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
+    jumpSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Jump));
     // render text
     spawnTextObjects();
     // generate tile map
@@ -95,7 +96,7 @@ LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, cons
     //generateTileMap();
     // 
     //tileGraph = new TileGraph(25, 15);
-    crearObjetosJuego("resources/level1.txt");
+    crearObjetosJuego("resources/level0.txt");
     // prepare player
     spawnPlayer(fieldPositionX + playerStartX * scaledTileSize,
         fieldPositionY + playerStartY * scaledTileSize);
@@ -630,7 +631,9 @@ void LevelScene::updateMovement(const bool isPressed, const int keycode)
             case SDL_SCANCODE_UP:
                 playerDirectionY -= 1;
                 break;
-            case SDL_SCANCODE_S:
+            /*case SDL_SCANCODE_S:
+                saltarSound->play();
+                break;*/
             case SDL_SCANCODE_DOWN:
                 playerDirectionY += 1;
                 break;
@@ -656,6 +659,8 @@ void LevelScene::updateMovement(const bool isPressed, const int keycode)
                 playerDirectionY += 1;
                 break;
             case SDL_SCANCODE_S:
+                saltarSound->play();
+                break;
             case SDL_SCANCODE_DOWN:
                 playerDirectionY -= 1;
                 break;
@@ -778,16 +783,39 @@ void LevelScene::updatePlayerCollision()
     }
 }
 
+void LevelScene::saltarPlayer(const bool isPressed, const int keycode) 
+{
+    if (player == nullptr)
+    {
+        return;
+    }
+
+    if (isPressed) 
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_S:
+        /*case SDL_SCANCODE_DOWN:*/
+           /* playerDirectionY += 1;*/
+            jumpSound->play();
+            player->speed = 0.002f;         
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 void LevelScene::updateEnemiesCollision()
 {
     // iterate enemies for collision
-    for(const auto& enemy : enemies)
+    for (const auto& enemy : enemies)
     {
         // iterate drawables for collision
-        for(const auto& collisionObject : collisions)
+        for (const auto& collisionObject : collisions)
         {
             // check for block collision
-            if(isCollisionDetected(enemy->getRect(), collisionObject.second->getRect()))
+            if (isCollisionDetected(enemy->getRect(), collisionObject.second->getRect()))
             {
                 // stop moving on collision detection
                 enemy->setMoving(false);
@@ -795,20 +823,20 @@ void LevelScene::updateEnemiesCollision()
             }
         }
         // check for bomb collision
-        if(bomb && isCollisionDetected(enemy->getRect(), bomb->getRect()))
+        if (bomb && isCollisionDetected(enemy->getRect(), bomb->getRect()))
         {
             // stop moving on collision detection
             enemy->setMoving(false);
             enemy->revertLastMove();
         }
         // check for player collision
-        if(player != nullptr)
+        if (player != nullptr)
         {
             // set width to smaller size
             SDL_Rect playerRect = player->getRect();
             playerRect.w = static_cast<int>(playerRect.w * 0.2);
             playerRect.h = static_cast<int>(playerRect.h * 0.2);
-            if(isCollisionDetected(playerRect, enemy->getRect()))
+            if (isCollisionDetected(playerRect, enemy->getRect()))
             {
                 // player killed by enemy
                 removeObject(player);
@@ -816,14 +844,14 @@ void LevelScene::updateEnemiesCollision()
                 gameOver();
             }
         }
-        if(player != nullptr)
+        if (player != nullptr)
         {
             // can attack?
-            if(!enemy->isMovingToCell() && enemy->canAttack())
+            if (!enemy->isMovingToCell() && enemy->canAttack())
             {
                 // check for attack radius
-                if(abs(player->getPositionX() + player->getWidth() / 2 - enemy->getPositionX() -
-                        enemy->getWidth() / 2) < enemy->getAttackRadius() &&
+                if (abs(player->getPositionX() + player->getWidth() / 2 - enemy->getPositionX() -
+                    enemy->getWidth() / 2) < enemy->getAttackRadius() &&
                     abs(player->getPositionY() + player->getHeight() / 2 - enemy->getPositionY() -
                         enemy->getHeight() / 2) < enemy->getAttackRadius())
                 {
